@@ -10,19 +10,16 @@ bool compareAT(Process a, Process b)
     return a.at < b.at;
 }
 
-bool compareID(Process a, Process b)
+bool compareCT(Process a, Process b)
 {
-    return a.pid < b.pid;
+    return a.ct < b.ct;
 }
 void Priority(struct Process P[], int n)
 {
    int time = 0;
    int completed = 0;
    int visited[n];
-   for(int i = 0 ; i < n ; i++)
-   {
-        visited[i] = 0;
-   }
+   fill(visited , visited + n, 0);
    while(completed != n)
    {
         int maxP = INT_MIN;
@@ -38,18 +35,12 @@ void Priority(struct Process P[], int n)
         }
         if(maxP_index == -1) //if no process is available then move time to the arrival time of next process
         {
-            int next = INT_MAX;
-            for(int i = 0; i < n; i++)
-            {
-                if(P[i].at > time && P[i].at < next)
-                    next = P[i].at;
-            }
-            time = next;
+            time++;
+            continue;
         }
         
         P[maxP_index].rem_bt--;
         time++;
-
         if(P[maxP_index].rem_bt == 0)
         {
             completed++;
@@ -57,7 +48,7 @@ void Priority(struct Process P[], int n)
             visited[maxP_index] = 1;
         }
    }
-    sort(P, P+n , compareID);
+    sort(P, P+n , compareCT);
     int TT[n] , WT[n];
     float ATT = 0.0 , AWT = 0.0;
     for(int i = 0; i < n; i++)
